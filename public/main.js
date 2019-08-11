@@ -16,8 +16,10 @@ const ranks = [
 ]
 const values = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 const deck = []
-const player1 = []
+const playerHand = []
 const dealerHand = []
+let playerHandValue = 0
+let dealerHandValue = 0
 
 class Card {
   constructor(rank, suit, value) {
@@ -50,13 +52,13 @@ const shuffleDeck = () => {
 const dealPlayerHand = () => {
   for (let i = 0; i < 1; i++) {
     const dealtCard = deck.pop()
-    player1.push(dealtCard)
+    playerHand.push(dealtCard)
   }
-  console.log(player1)
+  console.log(playerHand)
 }
 
 const dealDealerHand = () => {
-  for (let i = 0; i <= 1; i++) {
+  for (let i = 0; i < 1; i++) {
     const dealtCard = deck.pop()
     dealerHand.push(dealtCard)
   }
@@ -64,16 +66,56 @@ const dealDealerHand = () => {
 }
 
 const hitMeBaby = () => {
-  for (let i = 0; i < 1; i++) {
+  const dealtCard = deck.pop()
+  playerHand.push(dealtCard)
+
+  console.log(playerHand)
+}
+const hitDealer = () => {
+  if (dealerHandValue < 17) {
     const dealtCard = deck.pop()
-    player1.push(dealtCard)
+    dealerHand.push(dealtCard)
+  } else if (dealerHandValue <= 21 && dealerHandValue > playerHandValue) {
+    document.querySelector('.dealer-wins').textContent = 'Dealer Wins!'
   }
-  console.log(player1)
+
+  console.log(dealerHand)
 }
 
-// document
-//   .querySelector('#create-deck-button')
-//   .addEventListener('click', startGame)
+const valueOfPlayerCards = () => {
+  let playerHandValue
+  for (let v = 0; v < playerHand.length; v++) {
+    const card = playerHand[v]
+
+    if (playerHandValue) {
+      playerHandValue += card.value
+    } else {
+      playerHandValue = card.value
+    }
+    document.querySelector('.player-one-wins').textContent = playerHandValue
+  }
+  console.log(playerHandValue)
+}
+const valueOfDealerCards = () => {
+  let dealerHandValue
+  for (let v = 0; v < dealerHand.length; v++) {
+    const card = dealerHand[v]
+
+    if (dealerHandValue) {
+      dealerHandValue += card.value
+    } else {
+      dealerHandValue = card.value
+    }
+    document.querySelector('.dealer-wins').textContent = dealerHandValue
+  }
+  console.log(dealerHandValue)
+}
+
+const compareScores = () => {
+  if (dealerHand <= 21 && dealerHand > playerHand) {
+    console.log('help me')
+  }
+}
 
 const main = () => {
   createDeck()
@@ -81,8 +123,14 @@ const main = () => {
   dealPlayerHand()
   dealDealerHand()
   hitMeBaby()
+  hitDealer()
+  valueOfPlayerCards()
+  valueOfDealerCards()
+  // endGame()
 }
+
+document.querySelector('#stand').addEventListener('click', hitDealer)
 
 document.addEventListener('DOMContentLoaded', main)
 
-document.querySelector('#hitme').addEventListener('click', hitMeBaby)
+document.querySelector('#hitMe').addEventListener('click', hitMeBaby)
